@@ -1,23 +1,21 @@
 import paramiko
 
-hostname = "127.0.0.1"
-port = 22
-user = "karanam"
-pass = "pythoncode"
+class SSHClient:
+    def __init__(self, host, username, password):
+        self.host = "10.1.100.38"
+        self.username = "root"
+        self.password = root@123
+        self.client = paramiko.client.SSHClient()
 
-try:
-    client = paramiko.SSHClient()
-    client.load_sysytem_host_keys()
-    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    cleint.connect(hostname, port=port, username=user, password=pass)
-    while True:
-        try:
-            cmd = input("$>")
-            if cmd == "exit": break
-            stdin, stdout, stderr = client.exec_command(cmd)
-            print(stdout.read().decode())
-        except KeyboardInterrupt:
-            break
-    client.close()
-except Exception as err:
-    print(str(err)) 
+    def connect(self):
+        self.client.set_missing_host_key_policy(paramiko.client.AutoAddPolicy())
+        self.client.connect(self.host, username=self.username, password=self.password)
+
+    def execute(self, command):
+        stdin, stdout, stderr = self.client.exec_command(command)
+        return stdout.read()
+
+client = SSHClient('10.1.100.38', 'user', 'password')
+client.connect()
+output = client.execute('ls -l')
+print(output)
